@@ -3,7 +3,6 @@ ffutils is a group of bash scripts that automate your ffmpeg workflow. The folde
 
 
 ## Requirements
-Linux
 Bash
 ffmpeg
 
