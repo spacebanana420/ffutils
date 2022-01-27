@@ -3,4 +3,9 @@ ffutils is a group of bash scripts that automate your ffmpeg workflow. The folde
 
 
 ## Requirements
-Bash is required to interptet the code and ffmpeg is the base requirement for the scripts to work.
+Linux
+Bash
+ffmpeg
+
+## How to use
+To use the desired script, either mark the script as executable and execute it with a terminal or open a terminal, set the directory to the location of the script and write "bash *sriptname.sh*"
