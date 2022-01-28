@@ -65,15 +65,28 @@ if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
 then
     echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
     read scaleinteger
-    ffmpeg -i "$inputfile" -lossless $lossanswer  -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.webp
+    ffmpeg -i "$inputfile" -lossless $lossanswer -quality $qualitylevel  -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.webp
 else
     ffmpeg -i "$inputfile" -lossless $lossanswer -quality $qualitylevel  imageresult.webp
 fi
 }
 
+bmp () {
+echo "Scale image?"
+read scaleanswer
+if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
+then
+    echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
+    read scaleinteger
+    ffmpeg -i "$inputfile" -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.bmp
+else
+    ffmpeg -i "$inputfile" imageresult.bmp
+fi
+}
+
 echo "Input file"
 read inputfile
-echo "Format to transcode to (jpg png tiff webp)"
+echo "Format to transcode to (jpg png tiff webp bmp)"
 read format
 case ${format,,} in
 jpg)
@@ -87,5 +100,8 @@ tiff)
 ;;
 webp)
     webp
+;;
+bmp)
+    bmp
 ;;
 esac
