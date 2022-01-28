@@ -39,4 +39,11 @@ echo "Select the audio encoding (copy original, opus, aac, flac, pcm, mp3)"
 read audioencoder
 echo "CRF?"
 read crf
-ffmpeg -i "$inputfile" -c:v libx264 -preset:v $preset -crf $crf $audioencoding -pix_fmt yuv420p -bf 16 delivery_x264.mov
+echo "Subsample colour to 4:2:0? (y/n)?"
+read subsample
+if [ ${subsample,,} == y ] || [ ${subsample,,} == yes ]
+then
+    ffmpeg -i "$inputfile" -c:v libx264 -preset:v $preset -crf $crf $audioencoding -pix_fmt yuv420p -bf 16 delivery_x264.mov
+else
+    ffmpeg -i "$inputfile" -c:v libx264 -preset:v $preset -crf $crf $audioencoding -bf 16 delivery_x264.mov
+fi
