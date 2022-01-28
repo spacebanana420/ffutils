@@ -23,15 +23,15 @@ read audioencode
 audioparameters
 case ${profile,,} in
 dnxhd)
-    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhd $audioparams -pix_fmt yuv422p dnxhd_$inputfile
+    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhd $audioparams -pix_fmt yuv422p dnxhdresult.mov
 ;;
 lb || sq || hq)
-    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhr_${profile,,} $audioparams -pix_fmt yuv422p dnxhr_$inputfile
+    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhr_${profile,,} $audioparams -pix_fmt yuv422p dnxhrresult.mov
 ;;
 hqx)
-    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhr_hqx $audioparams -pix_fmt yuv422p10le dnxhr_$inputfile
+    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhr_hqx $audioparams -pix_fmt yuv422p10le dnxhrresult.mov
 ;;
 444)
-    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhr_444 $audioparams -pix_fmt yuv444p10le dnxhr_$inputfile
+    ffmpeg -i "$inputfile" -c:v dnxhd -profile:v dnxhr_444 $audioparams -pix_fmt yuv444p10le dnxhrresult.mov
 ;;
 esac
