@@ -7,4 +7,4 @@ Bash
 ffmpeg
 
 ## How to use
-To use the desired script, either mark the script as executable and execute it with a terminal or open a terminal, set the directory to the location of the script and write "bash *sriptname.sh*"
+To use the desired script, either mark the script as executable and execute it with a terminal or open a terminal, set the directory to the location of the script and write "bash *scriptname.sh*"
