@@ -23,9 +23,9 @@ read audioencode
 audioparameters
 case ${profile,,} in
 lt || standard || hq)
-    ffmpeg -i "$inputfile" -c:v prores_ks -profile:v ${profile,,} $audioparams -pix_fmt yuv422p10le prores_$inputfile
+    ffmpeg -i "$inputfile" -c:v prores_ks -profile:v ${profile,,} $audioparams -pix_fmt yuv422p10le proresresult.mov
 ;;
 4444 || 4444xq)
-    ffmpeg -i "$inputfile" -c:v prores_ks -profile:v ${profile,,} $audioparams -pix_fmt yuv444p10le prores_$inputfile
+    ffmpeg -i "$inputfile" -c:v prores_ks -profile:v ${profile,,} $audioparams -pix_fmt yuv444p10le proresresult.mov
 ;;
 esac
