@@ -1,55 +1,62 @@
 #!/bin/bash
 
+#Function for image scale parameters
+scaleimage () {
+echo "Scale image? (y/n)"
+read scaleanswer
+
+if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
+then
+    echo "Scale factor? (example: 0.5; 1.25; 2)"
+    read scalefactor
+    if [ $scalefactor == "0" ] || [ $scalefactor == "" ] || [ $scalefactor == "1" ]
+    then
+        scaleresult=""
+        return
+    fi
+    interpolation="a"
+    while [[ $interpolation != "bilinear" ]] && [[ $interpolation != "bicubic" ]] && [[ $interpolation != "nearest" ]] && [[ $interpolation != "lanczos" ]] && [[ $interpolation != "bicublin" ]] && [[ $interpolation != "" ]]
+    do
+        echo "Choose interpolation (bilinear, bicubic, nearest, lanczos, bicublin) (default=bicubic)"
+        read interpolation
+    done
+    if [ $interpolation != "bilinear" ] || [ $interpolation != "bicubic" ] || [ $interpolation != "nearest" ] || [ $interpolation != "lanczos" ] || [ $interpolation != "bicublin" ]
+    then
+        scaleresult="-vf scale=iw*${scalefactor}:ih*${scalefactor}"
+
+    else
+        scaleresult="-vf scale=iw*${scalefactor}:ih*${scalefactor}:flags=$interpolation"
+    fi
+else
+    scaleresult=""
+fi
+}
+
 # Image to JPG conversion. Supports quality level
 jpg () {
 echo "Quality level"
 read qualitylevel
-echo "Scale image?"
-read scaleanswer
-
-if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
-then
-    echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
-    read scaleinteger
-    ffmpeg -i "$inputfile" -qmin 1 -q $qualitylevel -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.jpg
-else
-    ffmpeg -i "$inputfile" -qmin 1 -q $qualitylevel imageresult.jpg
-fi
+scaleimage
+ffmpeg -i "$inputfile" -qmin 1 -q $qualitylevel $scaleresult imageresult.jpg
 }
 
 # Image to PNG conversion.
 png () {
-echo "Scale image?"
-read scaleanswer
-if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
-then
-    echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
-    read scaleinteger
-    ffmpeg -i "$inputfile" -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.png
-else
-    ffmpeg -i "$inputfile" imageresult.png
-fi
+scaleimage
+ffmpeg -i "$inputfile" $scaleresult imageresult.png
 }
 
 # Image to TIFF conversion. Supports multiple algorithms
 tiff () {
 echo "Compression algorithm (packbits, raw, lzw, deflate)"
 read compalg
-echo "Scale image?"
-read scaleanswer
-if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
-then
-    echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
-    read scaleinteger
-    ffmpeg -i "$inputfile" -compression_algo $compalg  -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.tiff
-else
-    ffmpeg -i "$inputfile" -compression_algo $compalg  imageresult.tiff
-fi
+scaleimage
+ffmpeg -i "$inputfile" -compression_algo $compalg $scaleresult imageresult.tiff
 }
 
 # Image to WEBP conversion. Supports lossless and quality level
 webp () {
-echo "Lossless image?"
+echo "Lossless image? (y/n)"
 read lossanswer
 if [ ${lossanswer,,} == "y" ] || [ ${lossanswer,,} == "yes" ]
 then
@@ -59,29 +66,13 @@ else
 fi
 echo "Quality? (0-100)"
 read qualitylevel
-echo "Scale image?"
-read scaleanswer
-if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
-then
-    echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
-    read scaleinteger
-    ffmpeg -i "$inputfile" -lossless $lossanswer -quality $qualitylevel  -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.webp
-else
-    ffmpeg -i "$inputfile" -lossless $lossanswer -quality $qualitylevel  imageresult.webp
-fi
+scaleimage
+ffmpeg -i "$inputfile" -lossless $lossanswer -quality $qualitylevel $scaleresult imageresult.webp
 }
 
 bmp () {
-echo "Scale image?"
-read scaleanswer
-if [ ${scaleanswer,,} == "yes" ] || [ ${scaleanswer,,} == "y" ]
-then
-    echo "Scale integer? (0.25; 0.5; 0.75; 1; 1.25; 1.5; 1.75; 2)"
-    read scaleinteger
-    ffmpeg -i "$inputfile" -vf scale=iw*${scaleinteger}:ih*${scaleinteger} imageresult.bmp
-else
-    ffmpeg -i "$inputfile" imageresult.bmp
-fi
+scaleimage
+ffmpeg -i "$inputfile" $scaleresult imageresult.bmp
 }
 
 echo "Input file"
