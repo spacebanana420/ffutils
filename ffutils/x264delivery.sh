@@ -124,13 +124,14 @@ fi
 
 if [[ $inputfile != "batch" ]]
 then
-    #Execute the ffmpeg command for the desired video file
+    #Execute the ffmpeg command once for the desired video file
     num=""
     ffcommand
 else
     #Execute the ffmpeg command for all video files inside current directory
     count=0
     for i in *
+    do
         if [[ $i == *".mov"* ]] || [[ $i == *".mp4"* ]] || [[ $i == *".avi"* ]] || [[ $i == *".mkv"* ]] || [[ $i == *".webm"* ]]
         then
             num="_$count"
@@ -139,5 +140,26 @@ else
             count+=1
         fi
     done
+    echo "Do you wish to encrypt the videos or move them to a folder? (move/encrypt/none) (default=none)"
+    read postencode
+    if [[ $postencode == "move"]] || [[ $postencode == "encrypt"]]
+    then
+        mkdir delivery_x264
+        count=0
+        for i in *
+        do
+            num="_$count"
+            if [[ $i == *"delivery_x264"*]]
+            then
+            count+=1
+            mv delivery_x264$num.$container
+            fi
+        done
+        if [[ $postencode == "encrypt" ]]
+        then
+            zip -0 -erv delivery_x264.zip delivery_x264
+        fi
+
+    fi
 fi
 echo "All is done!"
